@@ -1,10 +1,5 @@
 #include "SensorMesh.h"
 
-#ifdef DISPLAY_CLASS
-  #include "UITask.h"
-  static UITask ui_task(display);
-#endif
-
 class MyMesh : public SensorMesh {
 public:
   MyMesh(mesh::MainBoard& board, mesh::Radio& radio, mesh::MillisecondClock& ms, mesh::RNG& rng, mesh::RTCClock& rtc, mesh::MeshTables& tables)
@@ -58,14 +53,6 @@ void setup() {
 
   board.begin();
 
-#ifdef DISPLAY_CLASS
-  if (display.begin()) {
-    display.startFrame();
-    display.print("Please wait...");
-    display.endFrame();
-  }
-#endif
-
   if (!radio_init()) { halt(); }
 
   fast_rng.begin(radio_get_rng_seed());
@@ -105,10 +92,6 @@ void setup() {
   sensors.begin();
 
   the_mesh.begin(fs);
-
-#ifdef DISPLAY_CLASS
-  ui_task.begin(the_mesh.getNodePrefs(), FIRMWARE_BUILD_DATE, FIRMWARE_VERSION);
-#endif
 
   // send out initial Advertisement to the mesh
   the_mesh.sendSelfAdvertisement(16000);

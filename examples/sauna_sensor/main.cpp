@@ -115,6 +115,7 @@ void setup() {
 }
 
 void loop() {
+#if 0
   int len = strlen(command);
   while (Serial.available() && len < sizeof(command)-1) {
     char c = Serial.read();
@@ -138,11 +139,25 @@ void loop() {
 
     command[0] = 0;  // reset command buffer
   }
+#endif // 0
 
-  the_mesh.loop();
-  sensors.loop();
-#ifdef DISPLAY_CLASS
-  ui_task.loop();
-#endif
-  rtc_clock.tick();
+//  if (b_is_measure == true)
+  {
+    the_mesh.loop();
+    sensors.loop();
+    rtc_clock.tick();
+  }
 }
+
+
+// if b_is_measure is true
+//  b_is_measure is false
+//  Measure temperature every x minutes
+//  if temperature is above 45 then measure every y minutes
+//  send temperature
+//  write new RTC wakeup time
+// SYSTEM_ON light sleep
+
+// RTC interrupt handler
+// if RTC alarm
+//   set b_is_measure to true
